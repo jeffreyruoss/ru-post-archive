@@ -1,7 +1,8 @@
 export default class Archive {
   constructor(config) {
     this.config = config;
-    this.currentPage = 1;
+    const urlParams = new URLSearchParams(window.location.search);
+    this.currentPage = parseInt(urlParams.get('page')) || 1;
     this.render();
   }
 
@@ -107,12 +108,14 @@ export default class Archive {
   async previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.updateUrl();
       await this.render();
     }
   }
 
   async nextPage() {
     this.currentPage++;
+    this.updateUrl();
     await this.render();
   }
 
@@ -122,6 +125,12 @@ export default class Archive {
 
     previousButton.addEventListener('click', () => this.previousPage());
     nextButton.addEventListener('click', () => this.nextPage());
+  }
+
+  updateUrl() {
+    const url = new URL(window.location);
+    url.searchParams.set('page', this.currentPage);
+    window.history.replaceState(null, '', url.toString());
   }
 
   async render() {

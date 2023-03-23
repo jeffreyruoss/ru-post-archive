@@ -31,7 +31,8 @@ var Archive = /*#__PURE__*/function () {
     _classCallCheck(this, Archive);
 
     this.config = config;
-    this.currentPage = 1;
+    var urlParams = new URLSearchParams(window.location.search);
+    this.currentPage = parseInt(urlParams.get('page')) || 1;
     this.render();
   }
 
@@ -265,15 +266,16 @@ var Archive = /*#__PURE__*/function () {
             switch (_context6.prev = _context6.next) {
               case 0:
                 if (!(this.currentPage > 1)) {
-                  _context6.next = 4;
+                  _context6.next = 5;
                   break;
                 }
 
                 this.currentPage--;
-                _context6.next = 4;
+                this.updateUrl();
+                _context6.next = 5;
                 return this.render();
 
-              case 4:
+              case 5:
               case "end":
                 return _context6.stop();
             }
@@ -296,10 +298,11 @@ var Archive = /*#__PURE__*/function () {
             switch (_context7.prev = _context7.next) {
               case 0:
                 this.currentPage++;
-                _context7.next = 3;
+                this.updateUrl();
+                _context7.next = 4;
                 return this.render();
 
-              case 3:
+              case 4:
               case "end":
                 return _context7.stop();
             }
@@ -326,6 +329,13 @@ var Archive = /*#__PURE__*/function () {
       nextButton.addEventListener('click', function () {
         return _this2.nextPage();
       });
+    }
+  }, {
+    key: "updateUrl",
+    value: function updateUrl() {
+      var url = new URL(window.location);
+      url.searchParams.set('page', this.currentPage);
+      window.history.replaceState(null, '', url.toString());
     }
   }, {
     key: "render",
