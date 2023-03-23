@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Ru Post Archive
+ * Plugin Name: TTT Post Archive
  * Description: Post or CPT archive via a shortcode
  * Version: 1.0
  */
@@ -19,4 +19,4 @@ add_action( 'wp_enqueue_scripts', 'ru_post_archive_enqueue_style' );
 function ru_post_archive_shortcode() {
   return '<div id="ru-post-archive"></div>';
 }
-add_shortcode( 'ru_post_archive', 'ru_post_archive_shortcode' );
+add_shortcode( 'ttt_post_archive', 'ru_post_archive_shortcode' );
