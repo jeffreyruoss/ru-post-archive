@@ -51,6 +51,8 @@ var Archive = /*#__PURE__*/function () {
             queryString,
             url,
             response,
+            data,
+            totalPages,
             _args = arguments;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
@@ -70,19 +72,24 @@ var Archive = /*#__PURE__*/function () {
                 return response.json();
 
               case 10:
-                return _context.abrupt("return", _context.sent);
+                data = _context.sent;
+                totalPages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
+                return _context.abrupt("return", {
+                  data: data,
+                  totalPages: totalPages
+                });
 
-              case 13:
-                _context.prev = 13;
+              case 15:
+                _context.prev = 15;
                 _context.t0 = _context["catch"](4);
                 console.error(_context.t0);
 
-              case 16:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[4, 13]]);
+        }, _callee, this, [[4, 15]]);
       }));
 
       function fetchData(_x) {
@@ -95,7 +102,8 @@ var Archive = /*#__PURE__*/function () {
     key: "filters",
     value: function () {
       var _filters = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var categories, filterList;
+        var _yield$this$fetchData, categories, filterList;
+
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -105,23 +113,24 @@ var Archive = /*#__PURE__*/function () {
                 return this.fetchData(this.config.filterTaxonomy);
 
               case 3:
-                categories = _context2.sent;
+                _yield$this$fetchData = _context2.sent;
+                categories = _yield$this$fetchData.data;
                 filterList = categories.map(function (category) {
                   return "<li><a href=\"?filter=".concat(category.slug, "\">").concat(category.name, "</a></li>");
                 }).join('');
                 return _context2.abrupt("return", "\n        <div class=\"ru-post-archive__filter\">\n          <ul>\n            ".concat(filterList, "\n          </ul>\n        </div>\n      "));
 
-              case 8:
-                _context2.prev = 8;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
                 console.error(_context2.t0);
 
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 8]]);
+        }, _callee2, this, [[0, 9]]);
       }));
 
       function filters() {
@@ -134,7 +143,8 @@ var Archive = /*#__PURE__*/function () {
     key: "getFeaturedImageUrl",
     value: function () {
       var _getFeaturedImageUrl = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(featuredMediaId) {
-        var media, featuredImgSize;
+        var _yield$this$fetchData2, media, featuredImgSize;
+
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -144,21 +154,22 @@ var Archive = /*#__PURE__*/function () {
                 return this.fetchData("media/".concat(featuredMediaId));
 
               case 3:
-                media = _context3.sent;
+                _yield$this$fetchData2 = _context3.sent;
+                media = _yield$this$fetchData2.data;
                 featuredImgSize = this.config.featuredImgSize;
                 return _context3.abrupt("return", media.media_details.sizes[featuredImgSize].source_url);
 
-              case 9:
-                _context3.prev = 9;
+              case 10:
+                _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
                 console.error(_context3.t0);
 
-              case 12:
+              case 13:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 9]]);
+        }, _callee3, this, [[0, 10]]);
       }));
 
       function getFeaturedImageUrl(_x2) {
@@ -173,7 +184,8 @@ var Archive = /*#__PURE__*/function () {
       var _grid = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var _this = this;
 
-        var posts, postList;
+        var _yield$this$fetchData3, posts, totalPages, postList;
+
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -186,8 +198,10 @@ var Archive = /*#__PURE__*/function () {
                 });
 
               case 3:
-                posts = _context5.sent;
-                _context5.next = 6;
+                _yield$this$fetchData3 = _context5.sent;
+                posts = _yield$this$fetchData3.data;
+                totalPages = _yield$this$fetchData3.totalPages;
+                _context5.next = 8;
                 return Promise.all(posts.map( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(post) {
                     var featuredImageUrl, title, publishedDate, categories, content;
@@ -219,21 +233,21 @@ var Archive = /*#__PURE__*/function () {
                   };
                 }()));
 
-              case 6:
+              case 8:
                 postList = _context5.sent;
-                return _context5.abrupt("return", "\n        <div class=\"ru-post-archive__grid\">\n          ".concat(postList.join(''), "\n        </div>\n        <div class=\"ru-post-archive__pagination\">\n          <button id=\"previous-page\">Previous</button>\n          <span>Page ").concat(this.currentPage, "</span>\n          <button id=\"next-page\">Next</button>\n        </div>\n      "));
+                return _context5.abrupt("return", "\n        <div class=\"ru-post-archive__grid\">\n          ".concat(postList.join(''), "\n        </div>\n        <div class=\"ru-post-archive__pagination\">\n          <button id=\"previous-page\" ").concat(this.currentPage <= 1 ? 'disabled' : '', ">Previous</button>\n          <span>Page ").concat(this.currentPage, "</span>\n          <button id=\"next-page\" ").concat(this.currentPage >= totalPages ? 'disabled' : '', ">Next</button>\n        </div>\n      "));
 
-              case 10:
-                _context5.prev = 10;
+              case 12:
+                _context5.prev = 12;
                 _context5.t0 = _context5["catch"](0);
                 console.error(_context5.t0);
 
-              case 13:
+              case 15:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, this, [[0, 10]]);
+        }, _callee5, this, [[0, 12]]);
       }));
 
       function grid() {

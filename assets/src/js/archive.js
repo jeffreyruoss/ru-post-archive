@@ -17,7 +17,9 @@ export default class Archive {
     const url = `https://${domain}/wp-json/wp/v2/${endpoint}${queryString ? '?' + queryString : ''}`;
     try {
       const response = await fetch(url);
-      return await response.json();
+      const data = await response.json();
+      const totalPages = parseInt(response.headers.get('X-WP-TotalPages'), 10);
+      return { data, totalPages };
     } catch (error) {
       console.error(error);
     }
@@ -25,7 +27,7 @@ export default class Archive {
 
   async filters() {
     try {
-      const categories = await this.fetchData(this.config.filterTaxonomy);
+      const { data: categories } = await this.fetchData(this.config.filterTaxonomy);
       const filterList = categories
         .map(category => `<li><a href="?filter=${category.slug}">${category.name}</a></li>`)
         .join('');
@@ -44,7 +46,7 @@ export default class Archive {
 
   async getFeaturedImageUrl(featuredMediaId) {
     try {
-      const media = await this.fetchData(`media/${featuredMediaId}`);
+      const { data: media } = await this.fetchData(`media/${featuredMediaId}`);
       const featuredImgSize = this.config.featuredImgSize;
       return media.media_details.sizes[featuredImgSize].source_url;;
     } catch (error) {
@@ -55,7 +57,13 @@ export default class Archive {
 
   async grid() {
     try {
-      const posts = await this.fetchData(this.config.postType, {per_page: this.config.postsPerPage, page: this.currentPage});
+      const { data: posts, totalPages } = await this.fetchData(
+        this.config.postType,
+        {
+          per_page: this.config.postsPerPage,
+          page: this.currentPage
+        }
+      );
 
       const postList = await Promise.all(
         posts.map(async post => {
@@ -86,9 +94,9 @@ export default class Archive {
           ${postList.join('')}
         </div>
         <div class="ru-post-archive__pagination">
-          <button id="previous-page">Previous</button>
+          <button id="previous-page" ${this.currentPage <= 1 ? 'disabled' : ''}>Previous</button>
           <span>Page ${this.currentPage}</span>
-          <button id="next-page">Next</button>
+          <button id="next-page" ${this.currentPage >= totalPages ? 'disabled' : ''}>Next</button>
         </div>
       `;
     } catch (error) {
