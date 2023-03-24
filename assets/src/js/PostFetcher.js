@@ -12,11 +12,14 @@ export default class PostFetcher {
 
     // Merge the default values with the provided arguments
     this.options = { ...this.defaults, ...args };
+
+    this.bindEvents();
   }
 
   fetchPosts(args = {}) {
     // Update the options with any new arguments provided
     this.options = { ...this.options, ...args };
+    console.log(this.options);
 
     // Make an AJAX request to the PHP file
     jQuery.ajax({
@@ -37,6 +40,16 @@ export default class PostFetcher {
       error: function() {
         console.error('An error occurred while fetching the posts.');
       },
+    });
+  }
+
+  bindEvents() {
+    jQuery('#ru-post-archive').on('click', '.post-category', (event) => {
+      event.preventDefault();
+      const categorySlug = jQuery(event.currentTarget).data('category-slug');
+      this.options.categories = categorySlug;
+      this.options.current_page = 1;
+      this.fetchPosts();
     });
   }
 

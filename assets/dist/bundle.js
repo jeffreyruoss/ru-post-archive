@@ -43,6 +43,7 @@ var PostFetcher = /*#__PURE__*/function () {
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
+    this.bindEvents();
   }
 
   _createClass(PostFetcher, [{
@@ -50,7 +51,8 @@ var PostFetcher = /*#__PURE__*/function () {
     value: function fetchPosts() {
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       // Update the options with any new arguments provided
-      this.options = _objectSpread(_objectSpread({}, this.options), args); // Make an AJAX request to the PHP file
+      this.options = _objectSpread(_objectSpread({}, this.options), args);
+      console.log(this.options); // Make an AJAX request to the PHP file
 
       jQuery.ajax({
         url: '/wp-content/plugins/ru-post-archive/ajax-tips.php',
@@ -71,6 +73,20 @@ var PostFetcher = /*#__PURE__*/function () {
         error: function error() {
           console.error('An error occurred while fetching the posts.');
         }
+      });
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      var _this = this;
+
+      jQuery('#ru-post-archive').on('click', '.post-category', function (event) {
+        event.preventDefault();
+        var categorySlug = jQuery(event.currentTarget).data('category-slug');
+        _this.options.categories = categorySlug;
+        _this.options.current_page = 1;
+
+        _this.fetchPosts();
       });
     }
   }]);
@@ -151,7 +167,7 @@ __webpack_require__.r(__webpack_exports__);
 var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   post_type: 'tips',
   taxonomy: 'tips_category',
-  categories: '',
+  categories: 'test,Sketching',
   // comma separated list of category slugs: 'test,another-test'
   per_page: 3,
   image_size: 'thumbnail',

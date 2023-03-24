@@ -55,13 +55,14 @@ if ($query->have_posts()) {
     // Output the post's published date, followed by a pipe and a list of the post's categories
     echo '<div class="post-meta">';
     echo '<span class="post-date">' . get_the_date() . '</span>';
+
     echo ' | ';
 
     $categories = get_the_terms(get_the_ID(), $taxonomy);
     if ($categories && !is_wp_error($categories)) {
       $category_list = [];
       foreach ($categories as $category) {
-        $category_list[] = '<span class="post-category">' . $category->name . '</span>';
+        $category_list[] = '<a href="#" class="post-category" data-category-slug="' . $category->slug . '">' . $category->name . '</a>';
       }
       echo implode(', ', $category_list);
     }
