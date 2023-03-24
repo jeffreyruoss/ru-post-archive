@@ -20,6 +20,7 @@ export default class PostFetcher {
   fetchPosts(args = {}) {
     // Update the options with any new arguments provided
     this.options = { ...this.options, ...args };
+
     console.log(this.options);
 
     // Make an AJAX request to the PHP file
@@ -47,9 +48,18 @@ export default class PostFetcher {
   bindCategoryEvents() {
     jQuery('#ru-post-archive').on('click', '.post-category', (event) => {
       event.preventDefault();
-      const categorySlug = jQuery(event.currentTarget).data('category-slug');
-      this.options.categories = categorySlug;
+
       this.options.current_page = 1;
+
+      // if data-filter-multi="true" add the category else replace the category
+      if (jQuery(event.currentTarget).data('filter-multi') === true) {
+        const previousCategories = this.options.categories ? this.options.categories + ',' : '';
+        const newCategory = jQuery(event.currentTarget).data('category-slug');
+        this.options.categories = previousCategories + newCategory;
+      } else {
+        this.options.categories = jQuery(event.currentTarget).data('category-slug');
+      }
+
       this.fetchPosts();
     });
   }

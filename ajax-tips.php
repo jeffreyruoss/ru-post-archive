@@ -30,8 +30,19 @@ if (!empty($categories)) {
       'taxonomy' => $taxonomy,
       'field'    => 'slug',
       'terms'    => $category_terms,
+      'operator' => 'AND',
     ),
   );
+}
+
+// Add tax term filter links
+$terms = get_terms($taxonomy);
+if ($terms && !is_wp_error($terms)) {
+  $term_list = [];
+  foreach ($terms as $term) {
+    $term_list[] = '<a href="#" class="post-category" data-filter-multi="true" data-category-slug="' . $term->slug . '">' . $term->name . '</a>';
+  }
+  echo '<div class="post-categories">' . implode(', ', $term_list) . '</div>';
 }
 
 // Execute the WP_Query
