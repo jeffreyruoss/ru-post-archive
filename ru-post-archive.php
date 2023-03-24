@@ -17,6 +17,7 @@ function ru_post_archive_enqueue_style() {
 add_action( 'wp_enqueue_scripts', 'ru_post_archive_enqueue_style' );
 
 function ru_post_archive_shortcode() {
-  return '<div id="ru-post-archive"></div>';
+//  return '<div id="ru-post-archive"></div>';
+  return '<div id="tips-container"></div>';
 }
 add_shortcode( 'ttt_post_archive', 'ru_post_archive_shortcode' );

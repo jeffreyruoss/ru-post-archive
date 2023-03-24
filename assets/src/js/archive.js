@@ -15,6 +15,11 @@ export default class Archive {
   async fetchData(endpoint, params = {}) {
     const domain = this.getDomain();
     const queryString = new URLSearchParams(params).toString();
+
+    // console.log the query string
+    console.log(queryString);
+
+
     const url = `https://${domain}/wp-json/wp/v2/${endpoint}${queryString ? '?' + queryString : ''}`;
     try {
       const response = await fetch(url);
@@ -30,7 +35,7 @@ export default class Archive {
     try {
       const { data: categories } = await this.fetchData(this.config.filterTaxonomy);
       const filterList = categories
-        .map(category => `<li><a href="?filter=${category.slug}">${category.name}</a></li>`)
+        .map(category => `<li><a href="#" data-filter="${category.slug}">${category.name}</a></li>`)
         .join('');
 
       return `
@@ -43,6 +48,41 @@ export default class Archive {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async filtersListeners() {
+    const filterLinks = document.querySelectorAll('.ru-post-archive__filter a');
+    filterLinks.forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const filter = event.target.dataset.filter;
+        this.addFilterToUrl(filter);
+        // const url = new URL(event.target.href);
+        // const filter = url.searchParams.get('filter');
+        this.currentPage = 1;
+        this.updateUrl();
+        this.render();
+      });
+    });
+  }
+
+  addFilterToUrl(filter) {
+    const url = window.location.href;
+    const [baseUrl, queryString] = url.split('?');
+    const params = new URLSearchParams(queryString);
+
+    const newValue = filter;
+
+    if (params.has('filters')) {
+      const existingValue = params.get('filters');
+      const updatedValue = existingValue ? `${existingValue},${newValue}` : newValue;
+      params.set('filters', updatedValue);
+    } else {
+      params.set('filters', newValue);
+    }
+
+    const updatedUrl = `${baseUrl}?${params.toString()}`;
+    window.history.replaceState({}, '', updatedUrl);
   }
 
   async getFeaturedImageUrl(featuredMediaId) {
@@ -136,5 +176,6 @@ export default class Archive {
   async render() {
     document.querySelector('#ru-post-archive').innerHTML = (await this.filters()) + (await this.grid());
     this.addPaginationEventListeners();
+    this.filtersListeners();
   }
 }
