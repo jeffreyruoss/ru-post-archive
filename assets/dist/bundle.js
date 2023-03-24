@@ -100,9 +100,21 @@ var PostFetcher = /*#__PURE__*/function () {
           this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
 
           if (target.dataset.filterMulti === "true") {
-            var previousCategories = this.options.categories ? this.options.categories + "," : "";
             var newCategory = target.dataset.categorySlug;
-            this.options.categories = previousCategories + newCategory;
+            var categoriesArray = this.options.categories ? this.options.categories.split(",") : []; // Check if the category is already in the categories array
+
+            var categoryIndex = categoriesArray.indexOf(newCategory);
+
+            if (categoryIndex === -1) {
+              // If it's not in the array, add it
+              categoriesArray.push(newCategory);
+            } else {
+              // If it's already in the array, remove it
+              categoriesArray.splice(categoryIndex, 1);
+            } // Convert the array back to a comma-separated string
+
+
+            this.options.categories = categoriesArray.join(",");
           } else {
             this.options.categories = target.dataset.categorySlug;
           }
