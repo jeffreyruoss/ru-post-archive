@@ -2,14 +2,17 @@
 // Load WordPress functions
 require_once(defined('ABSPATH') ? ABSPATH . 'wp-load.php' : '../../../wp-load.php');
 
-// Get the category terms, tips_per_page, and current_page from the AJAX request
+// Get the parameters from the AJAX request
 $categories = isset($_GET['categories']) ? $_GET['categories'] : '';
+$post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
+$taxonomy = isset($_GET['taxonomy']) ? $_GET['taxonomy'] : 'category';
 $tips_per_page = isset($_GET['tips_per_page']) ? intval($_GET['tips_per_page']) : 10;
 $current_page = isset($_GET['current_page']) ? intval($_GET['current_page']) : 1;
+$image_size = isset($_GET['image_size']) ? $_GET['image_size'] : 'thumbnail';
 
 // Set up the WP_Query arguments
 $args = array(
-  'post_type' => 'tips',
+  'post_type' => $post_type,
   'posts_per_page' => $tips_per_page,
   'paged' => $current_page,
 );
@@ -22,7 +25,7 @@ if (!empty($categories)) {
   // Add the tax_query to the WP_Query arguments
   $args['tax_query'] = array(
     array(
-      'taxonomy' => 'tips_category',
+      'taxonomy' => $taxonomy,
       'field'    => 'slug',
       'terms'    => $category_terms,
     ),
@@ -38,8 +41,15 @@ if ($query->have_posts()) {
   while ($query->have_posts()) {
     $query->the_post();
 
-    // Output the post title and content
+    // Output the post title, content, and featured image
     echo '<h2>' . get_the_title() . '</h2>';
+
+    // Check if the post has a featured image
+    if (has_post_thumbnail()) {
+      // Output the featured image
+      echo '<div class="featured-image">' . get_the_post_thumbnail(null, $image_size) . '</div>';
+    }
+
     echo '<div>' . get_the_content() . '</div>';
   }
 
@@ -54,9 +64,10 @@ if ($query->have_posts()) {
   }
 } else {
   // Output a message if no results found
-  echo 'No tips found for the given categories.';
+  echo 'No results found for the given categories.';
 }
 
 // Reset the post data
 wp_reset_postdata();
+
 

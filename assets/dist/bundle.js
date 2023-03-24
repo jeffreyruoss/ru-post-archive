@@ -553,6 +553,12 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _archive__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./archive */ "./assets/src/js/archive.js");
 /* harmony import */ var _archive2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./archive2 */ "./assets/src/js/archive2.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 /**
@@ -567,19 +573,25 @@ __webpack_require__.r(__webpack_exports__);
 // const archive = new Archive(config);
 
 {
-  var getTips = function getTips() {
-    var categories = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    var tips_per_page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-    var current_page = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-    // Make an AJAX request to the PHP file
+  var ruGetPosts = function ruGetPosts() {
+    var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    // Set default values for the parameters
+    var defaults = {
+      post_type: 'post',
+      taxonomy: 'category',
+      categories: '',
+      tips_per_page: 10,
+      current_page: 1,
+      image_size: 'thumbnail'
+    }; // Merge the default values with the provided arguments
+
+    var options = _objectSpread(_objectSpread({}, defaults), args); // Make an AJAX request to the PHP file
+
+
     jQuery.ajax({
       url: '/wp-content/plugins/ru-post-archive/ajax-tips.php',
       type: 'GET',
-      data: {
-        categories: categories,
-        tips_per_page: tips_per_page,
-        current_page: current_page
-      },
+      data: options,
       success: function success(response) {
         // Update the content of a DOM element with the response
         jQuery('#tips-container').html(response); // Add click event to pagination links
@@ -587,16 +599,23 @@ __webpack_require__.r(__webpack_exports__);
         jQuery('.pagination-link').on('click', function (e) {
           e.preventDefault();
           var page = jQuery(this).data('page');
-          getTips(categories, tips_per_page, page);
+          ruGetPosts(_objectSpread(_objectSpread({}, options), {}, {
+            current_page: page
+          }));
         });
       },
       error: function error() {
-        console.error('An error occurred while fetching the tips.');
+        console.error('An error occurred while fetching the posts.');
       }
     });
   };
 
-  getTips('test,Sketching', 3);
+  ruGetPosts({
+    post_type: 'tips',
+    taxonomy: 'tips_category',
+    tips_per_page: 5,
+    image_size: 'thumbnail'
+  });
 }
 })();
 
