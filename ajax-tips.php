@@ -76,11 +76,16 @@ if ($query->have_posts()) {
     }
   }
 
-  // Output pagination
   $total_pages = $query->max_num_pages;
 // Output pagination
   if ($total_pages > 1) {
     echo '<div class="pagination">';
+
+    // Previous link
+    if ($current_page > 1) {
+      echo '<a href="#" class="pagination-link" data-page="' . ($current_page - 1) . '">&laquo; Previous</a>';
+    }
+
     for ($i = 1; $i <= $total_pages; $i++) {
       if ($i == $current_page) {
         // Disable the current pagination link and give it a class of active-page
@@ -89,8 +94,15 @@ if ($query->have_posts()) {
         echo '<a href="#" class="pagination-link" data-page="' . $i . '">' . $i . '</a>';
       }
     }
+
+    // Next link
+    if ($current_page < $total_pages) {
+      echo '<a href="#" class="pagination-link" data-page="' . ($current_page + 1) . '">Next &raquo;</a>';
+    }
+
     echo '</div>';
   }
+
 
 } else {
   // Output a message if no results found
