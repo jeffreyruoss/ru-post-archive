@@ -50,63 +50,75 @@ var PostFetcher = /*#__PURE__*/function () {
   _createClass(PostFetcher, [{
     key: "fetchPosts",
     value: function fetchPosts() {
+      var _this = this;
+
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       // Update the options with any new arguments provided
       this.options = _objectSpread(_objectSpread({}, this.options), args);
-      console.log(this.options); // Make an AJAX request to the PHP file
+      console.log(this.options); // Create a URL object and append the search parameters
 
-      jQuery.ajax({
-        url: '/wp-content/plugins/ru-post-archive/ajax-tips.php',
-        type: 'GET',
-        data: this.options,
-        success: function (response) {
-          // Update the content of a DOM element with the response
-          jQuery('#ru-post-archive').html(response); // Add click event to pagination links
+      var url = new URL('/wp-content/plugins/ru-post-archive/ajax-tips.php', window.location.origin);
 
-          jQuery('.pagination-link').on('click', function (e) {
+      for (var key in this.options) {
+        url.searchParams.append(key, this.options[key]);
+      } // Make a Fetch request to the PHP file
+
+
+      fetch(url).then(function (response) {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        return response.text();
+      }).then(function (html) {
+        // Update the content of a DOM element with the response
+        document.querySelector('#ru-post-archive').innerHTML = html; // Add click event to pagination links
+
+        document.querySelectorAll('.pagination-link').forEach(function (link) {
+          link.addEventListener('click', function (e) {
             e.preventDefault();
-            var page = jQuery(e.currentTarget).data('page');
-            this.fetchPosts({
+            var page = e.currentTarget.getAttribute('data-page');
+
+            _this.fetchPosts({
               current_page: page
             });
-          }.bind(this));
-        }.bind(this),
-        error: function error() {
-          console.error('An error occurred while fetching the posts.');
-        }
+          });
+        });
+      })["catch"](function (error) {
+        console.error('An error occurred while fetching the posts:', error);
       });
     }
   }, {
     key: "bindCategoryEvents",
     value: function bindCategoryEvents() {
-      var _this = this;
+      var _this2 = this;
 
       jQuery('#ru-post-archive').on('click', '.post-category', function (event) {
         event.preventDefault();
-        _this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
+        _this2.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
 
         if (jQuery(event.currentTarget).data('filter-multi') === true) {
-          var previousCategories = _this.options.categories ? _this.options.categories + ',' : '';
+          var previousCategories = _this2.options.categories ? _this2.options.categories + ',' : '';
           var newCategory = jQuery(event.currentTarget).data('category-slug');
-          _this.options.categories = previousCategories + newCategory;
+          _this2.options.categories = previousCategories + newCategory;
         } else {
-          _this.options.categories = jQuery(event.currentTarget).data('category-slug');
+          _this2.options.categories = jQuery(event.currentTarget).data('category-slug');
         }
 
-        _this.fetchPosts();
+        _this2.fetchPosts();
       });
     }
   }, {
     key: "bindPaginationEvents",
     value: function bindPaginationEvents() {
-      var _this2 = this;
+      var _this3 = this;
 
       jQuery('#ru-post-archive').on('click', '.pagination-link', function (event) {
         event.preventDefault();
         var pageNumber = jQuery(event.currentTarget).data('page');
-        _this2.options.current_page = pageNumber;
+        _this3.options.current_page = pageNumber;
 
-        _this2.fetchPosts();
+        _this3.fetchPosts();
       });
     }
   }]);
@@ -189,7 +201,7 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   taxonomy: 'tips_category',
   categories: '',
   // comma separated list of category slugs: 'test,another-test'
-  per_page: 100,
+  per_page: 3,
   image_size: 'thumbnail',
   show_excerpt: false // false shows full content
 

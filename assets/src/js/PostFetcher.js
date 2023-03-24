@@ -23,26 +23,36 @@ export default class PostFetcher {
 
     console.log(this.options);
 
-    // Make an AJAX request to the PHP file
-    jQuery.ajax({
-      url: '/wp-content/plugins/ru-post-archive/ajax-tips.php',
-      type: 'GET',
-      data: this.options,
-      success: function(response) {
+    // Create a URL object and append the search parameters
+    const url = new URL('/wp-content/plugins/ru-post-archive/ajax-tips.php', window.location.origin);
+    for (const key in this.options) {
+      url.searchParams.append(key, this.options[key]);
+    }
+
+    // Make a Fetch request to the PHP file
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then((html) => {
         // Update the content of a DOM element with the response
-        jQuery('#ru-post-archive').html(response);
+        document.querySelector('#ru-post-archive').innerHTML = html;
 
         // Add click event to pagination links
-        jQuery('.pagination-link').on('click', function(e) {
-          e.preventDefault();
-          var page = jQuery(e.currentTarget).data('page');
-          this.fetchPosts({ current_page: page });
-        }.bind(this));
-      }.bind(this),
-      error: function() {
-        console.error('An error occurred while fetching the posts.');
-      },
-    });
+        document.querySelectorAll('.pagination-link').forEach((link) => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = e.currentTarget.getAttribute('data-page');
+            this.fetchPosts({ current_page: page });
+          });
+        });
+      })
+      .catch((error) => {
+        console.error('An error occurred while fetching the posts:', error);
+      });
   }
 
   bindCategoryEvents() {
