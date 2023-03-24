@@ -43,7 +43,8 @@ var PostFetcher = /*#__PURE__*/function () {
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
-    this.bindEvents();
+    this.bindCategoryEvents();
+    this.bindPaginationEvents();
   }
 
   _createClass(PostFetcher, [{
@@ -76,8 +77,8 @@ var PostFetcher = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "bindEvents",
-    value: function bindEvents() {
+    key: "bindCategoryEvents",
+    value: function bindCategoryEvents() {
       var _this = this;
 
       jQuery('#ru-post-archive').on('click', '.post-category', function (event) {
@@ -87,6 +88,19 @@ var PostFetcher = /*#__PURE__*/function () {
         _this.options.current_page = 1;
 
         _this.fetchPosts();
+      });
+    }
+  }, {
+    key: "bindPaginationEvents",
+    value: function bindPaginationEvents() {
+      var _this2 = this;
+
+      jQuery('#ru-post-archive').on('click', '.pagination-link', function (event) {
+        event.preventDefault();
+        var pageNumber = jQuery(event.currentTarget).data('page');
+        _this2.options.current_page = pageNumber;
+
+        _this2.fetchPosts();
       });
     }
   }]);
@@ -169,7 +183,7 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   taxonomy: 'tips_category',
   categories: 'test,Sketching',
   // comma separated list of category slugs: 'test,another-test'
-  per_page: 3,
+  per_page: 2,
   image_size: 'thumbnail',
   show_excerpt: false // false shows full content
 

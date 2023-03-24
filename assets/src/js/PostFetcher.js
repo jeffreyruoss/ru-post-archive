@@ -13,7 +13,8 @@ export default class PostFetcher {
     // Merge the default values with the provided arguments
     this.options = { ...this.defaults, ...args };
 
-    this.bindEvents();
+    this.bindCategoryEvents();
+    this.bindPaginationEvents();
   }
 
   fetchPosts(args = {}) {
@@ -43,12 +44,21 @@ export default class PostFetcher {
     });
   }
 
-  bindEvents() {
+  bindCategoryEvents() {
     jQuery('#ru-post-archive').on('click', '.post-category', (event) => {
       event.preventDefault();
       const categorySlug = jQuery(event.currentTarget).data('category-slug');
       this.options.categories = categorySlug;
       this.options.current_page = 1;
+      this.fetchPosts();
+    });
+  }
+
+  bindPaginationEvents() {
+    jQuery('#ru-post-archive').on('click', '.pagination-link', (event) => {
+      event.preventDefault();
+      const pageNumber = jQuery(event.currentTarget).data('page');
+      this.options.current_page = pageNumber;
       this.fetchPosts();
     });
   }
