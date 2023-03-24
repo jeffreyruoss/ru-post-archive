@@ -4,7 +4,7 @@ export default class PostFetcher {
       post_type: 'post',
       taxonomy: 'category',
       categories: '', // comma separated list of category slugs: 'test,another-test'
-      tips_per_page: 10,
+      per_page: 10,
       current_page: 1,
       image_size: 'thumbnail',
       show_excerpt: false, // false shows full content

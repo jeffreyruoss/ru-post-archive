@@ -35,7 +35,7 @@ var PostFetcher = /*#__PURE__*/function () {
       taxonomy: 'category',
       categories: '',
       // comma separated list of category slugs: 'test,another-test'
-      tips_per_page: 10,
+      per_page: 10,
       current_page: 1,
       image_size: 'thumbnail',
       show_excerpt: false // false shows full content
@@ -153,7 +153,7 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   taxonomy: 'tips_category',
   categories: '',
   // comma separated list of category slugs: 'test,another-test'
-  tips_per_page: 2,
+  per_page: 2,
   image_size: 'thumbnail',
   show_excerpt: true // false shows full content
 

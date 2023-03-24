@@ -6,7 +6,7 @@ require_once(defined('ABSPATH') ? ABSPATH . 'wp-load.php' : '../../../wp-load.ph
 $categories = isset($_GET['categories']) ? $_GET['categories'] : '';
 $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
 $taxonomy = isset($_GET['taxonomy']) ? $_GET['taxonomy'] : 'category';
-$tips_per_page = isset($_GET['tips_per_page']) ? intval($_GET['tips_per_page']) : 10;
+$tips_per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
 $current_page = isset($_GET['current_page']) ? intval($_GET['current_page']) : 1;
 $image_size = isset($_GET['image_size']) ? $_GET['image_size'] : 'thumbnail';
 
