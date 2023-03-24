@@ -44,7 +44,7 @@ var PostFetcher = /*#__PURE__*/function () {
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
     this.taxListeners();
-    this.paginationListners();
+    this.paginationListeners();
   }
 
   _createClass(PostFetcher, [{
@@ -109,8 +109,8 @@ var PostFetcher = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "paginationListners",
-    value: function paginationListners() {
+    key: "paginationListeners",
+    value: function paginationListeners() {
       var _this3 = this;
 
       jQuery('#ru-post-archive').on('click', '.pagination-link', function (event) {

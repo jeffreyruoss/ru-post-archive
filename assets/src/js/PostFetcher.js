@@ -14,7 +14,7 @@ export default class PostFetcher {
     this.options = { ...this.defaults, ...args };
 
     this.taxListeners();
-    this.paginationListners();
+    this.paginationListeners();
   }
 
   fetchPosts(args = {}) {
@@ -74,7 +74,7 @@ export default class PostFetcher {
     });
   }
 
-  paginationListners() {
+  paginationListeners() {
     jQuery('#ru-post-archive').on('click', '.pagination-link', (event) => {
       event.preventDefault();
       const pageNumber = jQuery(event.currentTarget).data('page');
