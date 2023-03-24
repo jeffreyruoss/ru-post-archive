@@ -153,9 +153,9 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   taxonomy: 'tips_category',
   categories: '',
   // comma separated list of category slugs: 'test,another-test'
-  per_page: 2,
+  per_page: 3,
   image_size: 'thumbnail',
-  show_excerpt: true // false shows full content
+  show_excerpt: false // false shows full content
 
 });
 postFetcher.fetchPosts();

@@ -3,17 +3,19 @@
 require_once(defined('ABSPATH') ? ABSPATH . 'wp-load.php' : '../../../wp-load.php');
 
 // Get the parameters from the AJAX request
-$categories = isset($_GET['categories']) ? $_GET['categories'] : '';
-$post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
-$taxonomy = isset($_GET['taxonomy']) ? $_GET['taxonomy'] : 'category';
-$tips_per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
-$current_page = isset($_GET['current_page']) ? intval($_GET['current_page']) : 1;
-$image_size = isset($_GET['image_size']) ? $_GET['image_size'] : 'thumbnail';
+$post_type = $_GET['post_type'] ?? 'post';
+$taxonomy = $_GET['taxonomy'] ?? 'category';
+$categories = $_GET['categories'] ?? '';
+$per_page = intval($_GET['per_page'] ?? 10);
+$current_page = intval($_GET['current_page'] ?? 1);
+$image_size = $_GET['image_size'] ?? 'thumbnail';
+$show_excerpt = $_GET['show_excerpt'] ?? 'false';
+
 
 // Set up the WP_Query arguments
 $args = array(
   'post_type' => $post_type,
-  'posts_per_page' => $tips_per_page,
+  'posts_per_page' => $per_page,
   'paged' => $current_page,
 );
 
