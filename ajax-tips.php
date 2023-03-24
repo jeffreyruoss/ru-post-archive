@@ -37,7 +37,7 @@ $query = new WP_Query($args);
 
 // Check if the query has any results
 if ($query->have_posts()) {
-  // Iterate through the query results
+// Iterate through the query results
   while ($query->have_posts()) {
     $query->the_post();
 
@@ -46,11 +46,31 @@ if ($query->have_posts()) {
 
     // Check if the post has a featured image
     if (has_post_thumbnail()) {
-      // Output the featured image
+      // Output the featured image with the specified size
       echo '<div class="featured-image">' . get_the_post_thumbnail(null, $image_size) . '</div>';
     }
 
-    echo '<div>' . get_the_content() . '</div>';
+    // Output the post's published date, followed by a pipe and a list of the post's categories
+    echo '<div class="post-meta">';
+    echo '<span class="post-date">' . get_the_date() . '</span>';
+    echo ' | ';
+
+    $categories = get_the_terms(get_the_ID(), $taxonomy);
+    if ($categories && !is_wp_error($categories)) {
+      $category_list = [];
+      foreach ($categories as $category) {
+        $category_list[] = '<span class="post-category">' . $category->name . '</span>';
+      }
+      echo implode(', ', $category_list);
+    }
+    echo '</div>';
+
+    // Show the post's excerpt or content, depending on the value of the show_excerpt parameter
+    if (isset($_GET['show_excerpt']) && $_GET['show_excerpt'] === 'true') {
+      echo '<div>' . get_the_excerpt() . '</div>';
+    } else {
+      echo '<div>' . get_the_content() . '</div>';
+    }
   }
 
   // Output pagination

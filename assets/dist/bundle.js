@@ -34,9 +34,12 @@ var PostFetcher = /*#__PURE__*/function () {
       post_type: 'post',
       taxonomy: 'category',
       categories: '',
+      // comma separated list of category slugs: 'test,another-test'
       tips_per_page: 10,
       current_page: 1,
-      image_size: 'thumbnail'
+      image_size: 'thumbnail',
+      show_excerpt: false // false shows full content
+
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
@@ -55,7 +58,7 @@ var PostFetcher = /*#__PURE__*/function () {
         data: this.options,
         success: function (response) {
           // Update the content of a DOM element with the response
-          jQuery('#tips-container').html(response); // Add click event to pagination links
+          jQuery('#ru-post-archive').html(response); // Add click event to pagination links
 
           jQuery('.pagination-link').on('click', function (e) {
             e.preventDefault();
@@ -151,7 +154,9 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   categories: '',
   // comma separated list of category slugs: 'test,another-test'
   tips_per_page: 2,
-  image_size: 'thumbnail'
+  image_size: 'thumbnail',
+  show_excerpt: false // false shows full content
+
 });
 postFetcher.fetchPosts();
 })();

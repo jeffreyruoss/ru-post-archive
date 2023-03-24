@@ -3,10 +3,11 @@ export default class PostFetcher {
     this.defaults = {
       post_type: 'post',
       taxonomy: 'category',
-      categories: '',
+      categories: '', // comma separated list of category slugs: 'test,another-test'
       tips_per_page: 10,
       current_page: 1,
       image_size: 'thumbnail',
+      show_excerpt: false, // false shows full content
     };
 
     // Merge the default values with the provided arguments
@@ -24,7 +25,7 @@ export default class PostFetcher {
       data: this.options,
       success: function(response) {
         // Update the content of a DOM element with the response
-        jQuery('#tips-container').html(response);
+        jQuery('#ru-post-archive').html(response);
 
         // Add click event to pagination links
         jQuery('.pagination-link').on('click', function(e) {
