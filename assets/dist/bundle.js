@@ -43,8 +43,8 @@ var PostFetcher = /*#__PURE__*/function () {
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
-    this.bindCategoryEvents();
-    this.bindPaginationEvents();
+    this.taxListeners();
+    this.paginationListners();
   }
 
   _createClass(PostFetcher, [{
@@ -89,8 +89,8 @@ var PostFetcher = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "bindCategoryEvents",
-    value: function bindCategoryEvents() {
+    key: "taxListeners",
+    value: function taxListeners() {
       var _this2 = this;
 
       jQuery('#ru-post-archive').on('click', '.post-category', function (event) {
@@ -109,8 +109,8 @@ var PostFetcher = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "bindPaginationEvents",
-    value: function bindPaginationEvents() {
+    key: "paginationListners",
+    value: function paginationListners() {
       var _this3 = this;
 
       jQuery('#ru-post-archive').on('click', '.pagination-link', function (event) {

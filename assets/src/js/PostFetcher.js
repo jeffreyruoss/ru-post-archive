@@ -13,8 +13,8 @@ export default class PostFetcher {
     // Merge the default values with the provided arguments
     this.options = { ...this.defaults, ...args };
 
-    this.bindCategoryEvents();
-    this.bindPaginationEvents();
+    this.taxListeners();
+    this.paginationListners();
   }
 
   fetchPosts(args = {}) {
@@ -55,7 +55,7 @@ export default class PostFetcher {
       });
   }
 
-  bindCategoryEvents() {
+  taxListeners() {
     jQuery('#ru-post-archive').on('click', '.post-category', (event) => {
       event.preventDefault();
 
@@ -74,7 +74,7 @@ export default class PostFetcher {
     });
   }
 
-  bindPaginationEvents() {
+  paginationListners() {
     jQuery('#ru-post-archive').on('click', '.pagination-link', (event) => {
       event.preventDefault();
       const pageNumber = jQuery(event.currentTarget).data('page');
