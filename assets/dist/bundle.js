@@ -155,7 +155,7 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   // comma separated list of category slugs: 'test,another-test'
   tips_per_page: 2,
   image_size: 'thumbnail',
-  show_excerpt: false // false shows full content
+  show_excerpt: true // false shows full content
 
 });
 postFetcher.fetchPosts();

@@ -68,6 +68,7 @@ if ($query->have_posts()) {
     // Show the post's excerpt or content, depending on the value of the show_excerpt parameter
     if (isset($_GET['show_excerpt']) && $_GET['show_excerpt'] === 'true') {
       echo '<div>' . get_the_excerpt() . '</div>';
+      echo '<div class="read-more"><a href="' . get_permalink() . '">Read more</a></div>';
     } else {
       echo '<div>' . get_the_content() . '</div>';
     }
