@@ -78,13 +78,20 @@ if ($query->have_posts()) {
 
   // Output pagination
   $total_pages = $query->max_num_pages;
+// Output pagination
   if ($total_pages > 1) {
     echo '<div class="pagination">';
     for ($i = 1; $i <= $total_pages; $i++) {
-      echo '<a href="#" class="pagination-link" data-page="' . $i . '">' . $i . '</a> ';
+      if ($i == $current_page) {
+        // Disable the current pagination link and give it a class of active-page
+        echo '<span class="pagination-link active-page">' . $i . '</span>';
+      } else {
+        echo '<a href="#" class="pagination-link" data-page="' . $i . '">' . $i . '</a>';
+      }
     }
     echo '</div>';
   }
+
 } else {
   // Output a message if no results found
   echo 'No results found for the given categories.';
