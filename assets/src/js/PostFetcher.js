@@ -56,31 +56,43 @@ export default class PostFetcher {
   }
 
   taxListeners() {
-    jQuery('#ru-post-archive').on('click', '.post-category', (event) => {
-      event.preventDefault();
+    const postArchive = document.getElementById("ru-post-archive");
 
-      this.options.current_page = 1;
+    postArchive.addEventListener("click", function(event) {
+      const target = event.target;
 
-      // if data-filter-multi="true" add the category else replace the category
-      if (jQuery(event.currentTarget).data('filter-multi') === true) {
-        const previousCategories = this.options.categories ? this.options.categories + ',' : '';
-        const newCategory = jQuery(event.currentTarget).data('category-slug');
-        this.options.categories = previousCategories + newCategory;
-      } else {
-        this.options.categories = jQuery(event.currentTarget).data('category-slug');
+      if (target.classList.contains("post-category")) {
+        event.preventDefault();
+
+        this.options.current_page = 1;
+
+        // if data-filter-multi="true" add the category else replace the category
+        if (target.dataset.filterMulti === "true") {
+          const previousCategories = this.options.categories ? this.options.categories + "," : "";
+          const newCategory = target.dataset.categorySlug;
+          this.options.categories = previousCategories + newCategory;
+        } else {
+          this.options.categories = target.dataset.categorySlug;
+        }
+
+        this.fetchPosts();
       }
-
-      this.fetchPosts();
-    });
+    }.bind(this));
   }
 
   paginationListeners() {
-    jQuery('#ru-post-archive').on('click', '.pagination-link', (event) => {
-      event.preventDefault();
-      const pageNumber = jQuery(event.currentTarget).data('page');
-      this.options.current_page = pageNumber;
-      this.fetchPosts();
-    });
+    const postArchive = document.getElementById("ru-post-archive");
+
+    postArchive.addEventListener("click", function(event) {
+      const target = event.target;
+
+      if (target.classList.contains("pagination-link")) {
+        event.preventDefault();
+        const pageNumber = parseInt(target.dataset.page, 10);
+        this.options.current_page = pageNumber;
+        this.fetchPosts();
+      }
+    }.bind(this));
   }
 
 

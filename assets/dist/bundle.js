@@ -91,35 +91,40 @@ var PostFetcher = /*#__PURE__*/function () {
   }, {
     key: "taxListeners",
     value: function taxListeners() {
-      var _this2 = this;
+      var postArchive = document.getElementById("ru-post-archive");
+      postArchive.addEventListener("click", function (event) {
+        var target = event.target;
 
-      jQuery('#ru-post-archive').on('click', '.post-category', function (event) {
-        event.preventDefault();
-        _this2.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
+        if (target.classList.contains("post-category")) {
+          event.preventDefault();
+          this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
 
-        if (jQuery(event.currentTarget).data('filter-multi') === true) {
-          var previousCategories = _this2.options.categories ? _this2.options.categories + ',' : '';
-          var newCategory = jQuery(event.currentTarget).data('category-slug');
-          _this2.options.categories = previousCategories + newCategory;
-        } else {
-          _this2.options.categories = jQuery(event.currentTarget).data('category-slug');
+          if (target.dataset.filterMulti === "true") {
+            var previousCategories = this.options.categories ? this.options.categories + "," : "";
+            var newCategory = target.dataset.categorySlug;
+            this.options.categories = previousCategories + newCategory;
+          } else {
+            this.options.categories = target.dataset.categorySlug;
+          }
+
+          this.fetchPosts();
         }
-
-        _this2.fetchPosts();
-      });
+      }.bind(this));
     }
   }, {
     key: "paginationListeners",
     value: function paginationListeners() {
-      var _this3 = this;
+      var postArchive = document.getElementById("ru-post-archive");
+      postArchive.addEventListener("click", function (event) {
+        var target = event.target;
 
-      jQuery('#ru-post-archive').on('click', '.pagination-link', function (event) {
-        event.preventDefault();
-        var pageNumber = jQuery(event.currentTarget).data('page');
-        _this3.options.current_page = pageNumber;
-
-        _this3.fetchPosts();
-      });
+        if (target.classList.contains("pagination-link")) {
+          event.preventDefault();
+          var pageNumber = parseInt(target.dataset.page, 10);
+          this.options.current_page = pageNumber;
+          this.fetchPosts();
+        }
+      }.bind(this));
     }
   }]);
 
