@@ -59,7 +59,7 @@ if ($query->have_posts()) {
   while ($query->have_posts()) {
     $query->the_post();
 
-    echo '<div class="ru-archive__post">';
+    echo '<div class="ru-archive__post fade-transition">';
 
     // Output the post title, content, and featured image
     echo '<h2>' . get_the_title() . '</h2>';

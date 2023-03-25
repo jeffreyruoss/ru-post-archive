@@ -47,8 +47,27 @@ export default class PostFetcher {
         return response.text();
       })
       .then((html) => {
-        // Update the content of a DOM element with the response
-        document.querySelector('#ru-post-archive').innerHTML = html;
+        const ruPostArchive = document.querySelector("#ru-post-archive");
+        const postElements = ruPostArchive.querySelectorAll(".ru-archive__post");
+
+        // Add the "hidden" class to the existing post elements
+        postElements.forEach((element) => {
+          element.classList.add("hidden");
+        });
+
+        // Wait for the fade-out transition to complete
+        setTimeout(() => {
+          // Update the content of the DOM element with the response
+          ruPostArchive.innerHTML = html;
+
+          // Remove the "hidden" class from the new post elements after a short delay
+          const newPostElements = ruPostArchive.querySelectorAll(".ru-archive__post");
+          newPostElements.forEach((element) => {
+            setTimeout(() => {
+              element.classList.remove("hidden");
+            }, 50);
+          });
+        }, 100);
       })
       .catch((error) => {
         console.error('An error occurred while fetching the posts:', error);

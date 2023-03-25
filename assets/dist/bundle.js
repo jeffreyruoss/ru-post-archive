@@ -79,8 +79,24 @@ var PostFetcher = /*#__PURE__*/function () {
 
         return response.text();
       }).then(function (html) {
-        // Update the content of a DOM element with the response
-        document.querySelector('#ru-post-archive').innerHTML = html;
+        var ruPostArchive = document.querySelector("#ru-post-archive");
+        var postElements = ruPostArchive.querySelectorAll(".ru-archive__post"); // Add the "hidden" class to the existing post elements
+
+        postElements.forEach(function (element) {
+          element.classList.add("hidden");
+        }); // Wait for the fade-out transition to complete
+
+        setTimeout(function () {
+          // Update the content of the DOM element with the response
+          ruPostArchive.innerHTML = html; // Remove the "hidden" class from the new post elements after a short delay
+
+          var newPostElements = ruPostArchive.querySelectorAll(".ru-archive__post");
+          newPostElements.forEach(function (element) {
+            setTimeout(function () {
+              element.classList.remove("hidden");
+            }, 50);
+          });
+        }, 100);
       })["catch"](function (error) {
         console.error('An error occurred while fetching the posts:', error);
       });

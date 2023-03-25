@@ -5,6 +5,12 @@
  * These are the base styles
  * For styles specific to your theme, use the custom.css file
  */
+.ru-post-archive .fade-transition {
+  transition: opacity 0.1s ease-in-out;
+}
+.ru-post-archive .fade-transition.hidden {
+  opacity: 0;
+}
 .ru-post-archive .post-categories, .ru-post-archive .pagination {
   display: flex;
   flex-wrap: wrap;
