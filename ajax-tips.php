@@ -59,6 +59,8 @@ if ($query->have_posts()) {
   while ($query->have_posts()) {
     $query->the_post();
 
+    echo '<div class="ru-archive__post">';
+
     // Output the post title, content, and featured image
     echo '<h2>' . get_the_title() . '</h2>';
 
@@ -91,6 +93,8 @@ if ($query->have_posts()) {
     } else {
       echo '<div>' . get_the_content() . '</div>';
     }
+
+    echo '</div>';
   }
 
   $total_pages = $query->max_num_pages;
