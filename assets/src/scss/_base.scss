@@ -2,3 +2,65 @@
  * These are the base styles
  * For styles specific to your theme, use the custom.css file
  */
+.ru-post-archive {
+  .post-categories, .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  .post-categories .post-category, .pagination .pagination-link {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #000;
+    border-radius: 7px;
+    background-color: #0F4075;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #3c7cc0;
+    }
+  }
+  .pagination .pagination-link.active-page {
+    background-color: #666;
+  }
+  .post-categories .post-category {
+    &.checked {
+      font-weight: bold;
+    }
+  }
+  .ru-archive__post {
+    margin-bottom: 45px;
+    h2 {
+      margin-bottom: 15px;
+      padding-bottom: 0;
+    }
+  }
+  .featured-image {
+    width: 150px;
+    height: 150px;
+  }
+  .featured-image img {
+    width: 100%;
+    height: auto;
+  }
+  .post-meta {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: rgba(255,255,255,0.66);
+  }
+  .post-meta .post-category {
+    text-decoration: underline;
+    color: rgba(255,255,255,0.66);
+  }
+  .pagination .active-page {
+    font-weight: bold;
+    cursor: default;
+  }
+}
