@@ -8,6 +8,7 @@ export default class PostFetcher {
       current_page: 1,
       image_size: 'thumbnail',
       show_excerpt: false, // false shows full content
+      ajax_url: ''
     };
 
     // Merge the default values with the provided arguments
@@ -21,10 +22,19 @@ export default class PostFetcher {
     // Update the options with any new arguments provided
     this.options = { ...this.options, ...args };
 
-    console.log(this.options);
+    // Check for query parameters in the URL
+    const queryParams = new URLSearchParams(window.location.search);
+
+    // Override options with query parameters if they exist
+    if (queryParams.has('categories')) {
+      this.options.categories = queryParams.get('categories');
+    }
+    if (queryParams.has('current_page')) {
+      this.options.current_page = parseInt(queryParams.get('current_page'), 10);
+    }
 
     // Create a URL object and append the search parameters
-    const url = new URL('/wp-content/plugins/ru-post-archive/ajax-tips.php', window.location.origin);
+    const url = new URL(this.options.ajax_url, window.location.origin);
     for (const key in this.options) {
       url.searchParams.append(key, this.options[key]);
     }
@@ -88,11 +98,11 @@ export default class PostFetcher {
           this.options.categories = target.dataset.categorySlug;
         }
 
+        this.updateUrl();
         this.fetchPosts();
       }
     }.bind(this));
   }
-
 
   paginationListeners() {
     const postArchive = document.getElementById("ru-post-archive");
@@ -104,10 +114,19 @@ export default class PostFetcher {
         event.preventDefault();
         const pageNumber = parseInt(target.dataset.page, 10);
         this.options.current_page = pageNumber;
+
+        this.updateUrl();
         this.fetchPosts();
       }
     }.bind(this));
   }
 
-
+  updateUrl() {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    params.set('categories', this.options.categories);
+    params.set('current_page', this.options.current_page);
+    url.search = params.toString();
+    window.history.pushState({}, '', url);
+  }
 }

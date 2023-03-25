@@ -38,8 +38,9 @@ var PostFetcher = /*#__PURE__*/function () {
       per_page: 10,
       current_page: 1,
       image_size: 'thumbnail',
-      show_excerpt: false // false shows full content
-
+      show_excerpt: false,
+      // false shows full content
+      ajax_url: ''
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
@@ -54,10 +55,20 @@ var PostFetcher = /*#__PURE__*/function () {
 
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       // Update the options with any new arguments provided
-      this.options = _objectSpread(_objectSpread({}, this.options), args);
-      console.log(this.options); // Create a URL object and append the search parameters
+      this.options = _objectSpread(_objectSpread({}, this.options), args); // Check for query parameters in the URL
 
-      var url = new URL('/wp-content/plugins/ru-post-archive/ajax-tips.php', window.location.origin);
+      var queryParams = new URLSearchParams(window.location.search); // Override options with query parameters if they exist
+
+      if (queryParams.has('categories')) {
+        this.options.categories = queryParams.get('categories');
+      }
+
+      if (queryParams.has('current_page')) {
+        this.options.current_page = parseInt(queryParams.get('current_page'), 10);
+      } // Create a URL object and append the search parameters
+
+
+      var url = new URL(this.options.ajax_url, window.location.origin);
 
       for (var key in this.options) {
         url.searchParams.append(key, this.options[key]);
@@ -119,6 +130,7 @@ var PostFetcher = /*#__PURE__*/function () {
             this.options.categories = target.dataset.categorySlug;
           }
 
+          this.updateUrl();
           this.fetchPosts();
         }
       }.bind(this));
@@ -134,9 +146,20 @@ var PostFetcher = /*#__PURE__*/function () {
           event.preventDefault();
           var pageNumber = parseInt(target.dataset.page, 10);
           this.options.current_page = pageNumber;
+          this.updateUrl();
           this.fetchPosts();
         }
       }.bind(this));
+    }
+  }, {
+    key: "updateUrl",
+    value: function updateUrl() {
+      var url = new URL(window.location.href);
+      var params = new URLSearchParams(url.search);
+      params.set('categories', this.options.categories);
+      params.set('current_page', this.options.current_page);
+      url.search = params.toString();
+      window.history.pushState({}, '', url);
     }
   }]);
 
@@ -220,8 +243,9 @@ var postFetcher = new _PostFetcher__WEBPACK_IMPORTED_MODULE_0__["default"]({
   // comma separated list of category slugs: 'test,another-test'
   per_page: 3,
   image_size: 'thumbnail',
-  show_excerpt: false // false shows full content
-
+  show_excerpt: false,
+  // false shows full content
+  ajax_url: '/wp-content/plugins/ru-post-archive/ajax-tips.php'
 });
 postFetcher.fetchPosts();
 })();

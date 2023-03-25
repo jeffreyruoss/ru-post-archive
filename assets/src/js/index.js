@@ -7,6 +7,7 @@ const postFetcher = new PostFetcher({
   per_page: 3,
   image_size: 'thumbnail',
   show_excerpt: false, // false shows full content
+  ajax_url: '/wp-content/plugins/ru-post-archive/ajax-tips.php'
 });
 
 postFetcher.fetchPosts();
