@@ -44,15 +44,12 @@ var PostFetcher = /*#__PURE__*/function () {
     }; // Merge the default values with the provided arguments
 
     this.options = _objectSpread(_objectSpread({}, this.defaults), args);
-    this.taxListeners();
-    this.paginationListeners();
+    this.archiveListeners();
   }
 
   _createClass(PostFetcher, [{
     key: "fetchPosts",
     value: function fetchPosts() {
-      var _this = this;
-
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       // Update the options with any new arguments provided
       this.options = _objectSpread(_objectSpread({}, this.options), args); // Check for query parameters in the URL
@@ -83,73 +80,71 @@ var PostFetcher = /*#__PURE__*/function () {
         return response.text();
       }).then(function (html) {
         // Update the content of a DOM element with the response
-        document.querySelector('#ru-post-archive').innerHTML = html; // Add click event to pagination links
-
-        document.querySelectorAll('.pagination-link').forEach(function (link) {
-          link.addEventListener('click', function (e) {
-            e.preventDefault();
-            var page = e.currentTarget.getAttribute('data-page');
-
-            _this.fetchPosts({
-              current_page: page
-            });
-          });
-        });
+        document.querySelector('#ru-post-archive').innerHTML = html;
       })["catch"](function (error) {
         console.error('An error occurred while fetching the posts:', error);
       });
     }
   }, {
-    key: "taxListeners",
-    value: function taxListeners() {
+    key: "archiveListeners",
+    value: function archiveListeners() {
+      var _this = this;
+
       var postArchive = document.getElementById("ru-post-archive");
       postArchive.addEventListener("click", function (event) {
         var target = event.target;
+        event.preventDefault();
 
         if (target.classList.contains("post-category")) {
-          event.preventDefault();
-          this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
-
-          if (target.dataset.filterMulti === "true") {
-            var newCategory = target.dataset.categorySlug;
-            var categoriesArray = this.options.categories ? this.options.categories.split(",") : []; // Check if the category is already in the categories array
-
-            var categoryIndex = categoriesArray.indexOf(newCategory);
-
-            if (categoryIndex === -1) {
-              // If it's not in the array, add it
-              categoriesArray.push(newCategory);
-            } else {
-              // If it's already in the array, remove it
-              categoriesArray.splice(categoryIndex, 1);
-            } // Convert the array back to a comma-separated string
-
-
-            this.options.categories = categoriesArray.join(",");
-          } else {
-            this.options.categories = target.dataset.categorySlug;
-          }
-
-          this.updateUrl();
-          this.fetchPosts();
+          // Handle category click
+          _this.handleCategoryClick(target);
+        } else if (target.classList.contains("pagination-link")) {
+          // Handle pagination click
+          _this.handlePaginationClick(target);
         }
-      }.bind(this));
+      });
     }
   }, {
-    key: "paginationListeners",
-    value: function paginationListeners() {
-      var postArchive = document.getElementById("ru-post-archive");
-      postArchive.addEventListener("click", function (event) {
-        var target = event.target;
+    key: "handleCategoryClick",
+    value: function handleCategoryClick(target) {
+      if (target.classList.contains("post-category")) {
+        event.preventDefault();
+        this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category
 
-        if (target.classList.contains("pagination-link")) {
-          event.preventDefault();
-          var pageNumber = parseInt(target.dataset.page, 10);
-          this.options.current_page = pageNumber;
-          this.updateUrl();
-          this.fetchPosts();
+        if (target.dataset.filterMulti === "true") {
+          var newCategory = target.dataset.categorySlug;
+          var categoriesArray = this.options.categories ? this.options.categories.split(",") : []; // Check if the category is already in the categories array
+
+          var categoryIndex = categoriesArray.indexOf(newCategory);
+
+          if (categoryIndex === -1) {
+            // If it's not in the array, add it
+            categoriesArray.push(newCategory);
+          } else {
+            // If it's already in the array, remove it
+            categoriesArray.splice(categoryIndex, 1);
+          } // Convert the array back to a comma-separated string
+
+
+          this.options.categories = categoriesArray.join(",");
+        } else {
+          this.options.categories = target.dataset.categorySlug;
         }
-      }.bind(this));
+
+        this.updateUrl();
+        this.fetchPosts();
+      }
+    }
+  }, {
+    key: "handlePaginationClick",
+    value: function handlePaginationClick(target) {
+      if (target.classList.contains("pagination-link")) {
+        event.preventDefault();
+        var pageNumber = parseInt(target.dataset.page, 10);
+        this.options.current_page = pageNumber;
+        this.updateUrl();
+        this.fetchPosts();
+      }
     }
   }, {
     key: "updateUrl",
