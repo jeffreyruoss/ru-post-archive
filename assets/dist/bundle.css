@@ -34,10 +34,10 @@
   background-color: #3c7cc0;
 }
 .ru-post-archive .pagination .pagination-link.active-page {
-  background-color: #666;
+  background-color: #0b3563;
 }
 .ru-post-archive .post-categories .post-category.checked {
-  font-weight: bold;
+  background-color: #1C72CE;
 }
 .ru-post-archive .ru-archive__post {
   margin-bottom: 45px;

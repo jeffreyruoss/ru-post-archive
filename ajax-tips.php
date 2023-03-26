@@ -44,8 +44,8 @@ if ($terms && !is_wp_error($terms)) {
   foreach ($terms as $term) {
     $is_checked = !empty($category_terms) && in_array($term->slug, $category_terms);
     $checked_class = $is_checked ? ' checked' : '';
-    $checked_mark = $is_checked ? '<span> &#10003</span>' : '';
-    $term_list[] = '<a href="#" class="post-category' . $checked_class . '" data-filter-multi="true" data-category-slug="' . $term->slug . '">' . $checked_mark . $term->name . '</a>';
+    $close_x = $is_checked ? '<span>&#10005 </span>' : '';
+    $term_list[] = '<a href="#" class="post-category' . $checked_class . '" data-filter-multi="true" data-category-slug="' . $term->slug . '">' . $close_x . $term->name . '</a>';
   }
   echo '<div class="post-categories">' . implode('', $term_list) . '</div>';
 }

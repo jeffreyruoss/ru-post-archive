@@ -33,11 +33,11 @@
     }
   }
   .pagination .pagination-link.active-page {
-    background-color: #666;
+    background-color: #0b3563;
   }
   .post-categories .post-category {
     &.checked {
-      font-weight: bold;
+        background-color: #1C72CE;
     }
   }
   .ru-archive__post {
