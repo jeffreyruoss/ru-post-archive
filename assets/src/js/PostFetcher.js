@@ -81,15 +81,17 @@ export default class PostFetcher {
       const target = event.target;
       event.preventDefault();
 
-      if (target.classList.contains("post-category")) {
-        // Handle category click
+      // Check if the target matches the '.post-category' selector
+      if (target.closest(".post-category")) {
         this.handleCategoryClick(target);
-      } else if (target.classList.contains("pagination-link")) {
-        // Handle pagination click
+      }
+      // Check if the target matches the '.pagination-link' selector
+      else if (target.closest(".pagination-link")) {
         this.handlePaginationClick(target);
       }
     });
   }
+
 
   handleCategoryClick(target) {
     if (target.classList.contains("post-category")) {

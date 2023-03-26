@@ -109,13 +109,12 @@ var PostFetcher = /*#__PURE__*/function () {
       var postArchive = document.getElementById("ru-post-archive");
       postArchive.addEventListener("click", function (event) {
         var target = event.target;
-        event.preventDefault();
+        event.preventDefault(); // Check if the target matches the '.post-category' selector
 
-        if (target.classList.contains("post-category")) {
-          // Handle category click
+        if (target.closest(".post-category")) {
           _this.handleCategoryClick(target);
-        } else if (target.classList.contains("pagination-link")) {
-          // Handle pagination click
+        } // Check if the target matches the '.pagination-link' selector
+        else if (target.closest(".pagination-link")) {
           _this.handlePaginationClick(target);
         }
       });
