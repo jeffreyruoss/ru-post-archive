@@ -47,7 +47,7 @@ if ($terms && !is_wp_error($terms)) {
     $checked_mark = $is_checked ? '<span> &#10003</span>' : '';
     $term_list[] = '<a href="#" class="post-category' . $checked_class . '" data-filter-multi="true" data-category-slug="' . $term->slug . '">' . $checked_mark . $term->name . '</a>';
   }
-  echo '<div class="post-categories">' . implode(', ', $term_list) . '</div>';
+  echo '<div class="post-categories">' . implode('', $term_list) . '</div>';
 }
 
 // Execute the WP_Query
