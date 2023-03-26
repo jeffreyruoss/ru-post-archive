@@ -111,7 +111,7 @@ var PostFetcher = /*#__PURE__*/function () {
         var target = event.target;
         event.preventDefault(); // Check if the target matches the '.post-category' selector
 
-        if (target.closest(".post-category")) {
+        if (target.closest(".post-category") || target.closest(".post-category span.close-x")) {
           _this.handleCategoryClick(target);
         } // Check if the target matches the '.pagination-link' selector
         else if (target.closest(".pagination-link")) {
@@ -122,6 +122,11 @@ var PostFetcher = /*#__PURE__*/function () {
   }, {
     key: "handleCategoryClick",
     value: function handleCategoryClick(target) {
+      // if target has class close-x, set target to parent
+      if (target.classList.contains("close-x")) {
+        target = target.parentNode;
+      }
+
       if (target.classList.contains("post-category")) {
         event.preventDefault();
         this.options.current_page = 1; // if data-filter-multi="true" add the category else replace the category

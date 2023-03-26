@@ -82,7 +82,7 @@ export default class PostFetcher {
       event.preventDefault();
 
       // Check if the target matches the '.post-category' selector
-      if (target.closest(".post-category")) {
+      if (target.closest(".post-category") || target.closest(".post-category span.close-x")) {
         this.handleCategoryClick(target);
       }
       // Check if the target matches the '.pagination-link' selector
@@ -94,6 +94,10 @@ export default class PostFetcher {
 
 
   handleCategoryClick(target) {
+    // if target has class close-x, set target to parent
+    if (target.classList.contains("close-x")) {
+      target = target.parentNode;
+    }
     if (target.classList.contains("post-category")) {
       event.preventDefault();
 
